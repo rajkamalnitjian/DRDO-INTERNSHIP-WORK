@@ -1,0 +1,6 @@
+ morphological_operation:-https://www.cs.auckland.ac.nz/courses/compsci773s1c/lectures/ImageProcessing-html/topic4.htm#erosion
+  find centroid from contours:-https://python.hotexamples.com/examples/cv2/-/moments/python-moments-function-examples.html
+
+
+
+
