@@ -1,9 +1,94 @@
-
-
 import argparse
 from xml.etree.ElementPath import get_parent_map
 import cv2
 import imutils
+
+import math
+import csv
+# import _LineStyle from matplotlib.lines 
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+import pandas
+# %matplotlib inline
+import matplotlib.pyplot as plt
+plt.style.use('seaborn-whitegrid')
+import numpy as np
+
+velocity=[]
+def plotgraph(z):
+   fig = plt.figure()
+   ax = plt.axes()
+   ax.plot(velocity, z)
+   ax.set_xlabel('$velocity$', fontsize=20)
+   ax.set_ylabel('$time$', fontsize=20)
+   plt.show()
+    
+def velocity_calculation(d,height,fps,tv,foacl_length_camera_in_mm,vertical_dimesnion_of_image_in_mm,H):
+    #    foacl_length_camera_in_mm=50
+    #    vertical_dimesnion_of_image_in_mm=35
+       tc=math.atan(vertical_dimesnion_of_image_in_mm/2*foacl_length_camera_in_mm)
+    #    tv=60
+       T=tv+(tc/2.0)
+
+       D=H*math.tan(T)
+       P=2*math.tan(tc/2)*math.sqrt(math.pow(H,2)+math.pow(D,2))
+       K=P/int(height)
+       t=1/int(fps)
+      
+       v=(3.6*K*d)/int(t)
+       print(v)
+       velocity.append(v)
+       
+       
+points = pandas.read_csv('co-ordinate_for_use.csv')
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+x = points['x_co-ordinate'].values
+y = points['y_co-ordinate'].values
+z = points['time'].values
+print(type(z))
+ax.legend()
+ax.set_xlabel('$x_co-ordinate$', fontsize=20)
+ax.set_ylabel('$y_co-ordinate$', fontsize=20)
+ax.set_zlabel('$time$', fontsize=20)
+ax.scatter(x, y, z, c='r', marker='o',s=1)
+ax.plot(x, y, z, color='black')
+
+
+plt.show()
+
+
+stx=x[0]
+sty=y[0]
+velocity.append(0)
+for i in range(1,len(x)):
+    distance=math.sqrt(math.pow(x[i]-stx,2)+math.pow(y[i]-sty,2))
+    stx=x[i]
+    sty=y[i]
+    velocity_calculation(distance,240,30,60,50,35,7.6)
+plotgraph(z)  
+    
+   
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # # ap = argparse.ArgumentParser()
 # # ap.add_argument("-i", "--image", required=True, help="image1.jpeg")
@@ -139,33 +224,33 @@ import imutils
 # # #     # if keyboard == 'q' or keyboard == 27:
 # # #     #    break
 
-from mpl_toolkits import mplot3d
-# matplotlib inline
-import numpy as np
-import matplotlib.pyplot as plt
+# from mpl_toolkits import mplot3d
+# # matplotlib inline
+# import numpy as np
+# import matplotlib.pyplot as plt
 # fig = plt.figure()
 # ax = plt.axes(projection='3d')
 
-listx=[]
-listy=[]
-listtime=[]
-for i  in range(1,3):
-   a,b = input().split("  ")
-   a=int(a)
-   b=int(b)
-   listx.append(a)
-   listy.append(b)
-   listtime.append(i)
-plt.scatter(listx, listy)
-plt.show()
+# listx=[]
+# listy=[]
+# listtime=[]
+# for i  in range(1,3):
+#    a,b = input().split("  ")
+#    a=int(a)
+#    b=int(b)
+#    listx.append(a)
+#    listy.append(b)
+#    listtime.append(i)
+# plt.scatter(listx, listy)
+# plt.show()
 
-fig = plt.figure(figsize =(14, 9))
-ax = plt.axes(projection ='3d')
+# fig = plt.figure(figsize =(14, 9))
+# ax = plt.axes(projection ='3d')
 
-ax.plot3D(listtime, listx,listtime, 'red')
-ax.legend()
-ax.set_xlabel('$time$', fontsize=20)
-ax.set_ylabel('$X$', fontsize=20)
-ax.set_zlabel('$Y$',fontsize=20)
+# ax.plot3D(listtime, listx,listtime, 'red')
+# ax.legend()
+# ax.set_xlabel('$time$', fontsize=20)
+# ax.set_ylabel('$X$', fontsize=20)
+# ax.set_zlabel('$Y$',fontsize=20)
 
-plt.show()
+# plt.show()
